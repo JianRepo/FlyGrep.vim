@@ -606,7 +606,12 @@ function! SpaceVim#plugins#flygrep#open(agrv) abort
           \ 'col': 0
           \ })
   else
-    noautocmd rightbelow split __flygrep__
+    if empty(getcwd())
+      let $PROJ_DIR = 'FlyGrep'
+    else
+      let $PROJ_DIR = getcwd()
+    endif
+    noautocmd rightbelow split $PROJ_DIR
     let s:flygrep_win_id = win_getid()
   endif
   if exists('&winhighlight')
@@ -622,7 +627,7 @@ function! SpaceVim#plugins#flygrep#open(agrv) abort
     call s:HI.hide_in_normal('Cursor')
   endif
   " setlocal nomodifiable
-  setf SpaceVimFlyGrep
+  setf FlyGrep
   call s:matchadd('FileName', '[^:]*:\d\+:\d\+:', 3)
   let s:MPT._prompt.begin = get(a:agrv, 'input', '')
   let fs = get(a:agrv, 'files', '')
